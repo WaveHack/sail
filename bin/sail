@@ -21,7 +21,10 @@ fi
 # Define environment variables...
 export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
+export APP_USER=${APP_USER:-"sail"}
 export DB_PORT=${DB_PORT:-3306}
+export MYSQL_SERVICE=${MYSQL_SERVICE:-"mysql"}
+export PGSQL_SERVICE=${PGSQL_SERVICE:-"pgsql"}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
 
@@ -74,7 +77,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 php "$@"
         else
@@ -87,7 +90,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 composer "$@"
         else
@@ -100,7 +103,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 php artisan "$@"
         else
@@ -113,7 +116,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 php artisan test "$@"
         else
@@ -126,7 +129,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 -e "APP_URL=http://laravel.test" \
                 -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
                 "$APP_SERVICE" \
@@ -141,7 +144,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 -e "APP_URL=http://laravel.test" \
                 -e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub" \
                 "$APP_SERVICE" \
@@ -156,7 +159,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 php artisan tinker
         else
@@ -169,7 +172,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 node "$@"
         else
@@ -182,7 +185,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 npm "$@"
         else
@@ -195,7 +198,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 npx "$@"
         else
@@ -208,7 +211,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 yarn "$@"
         else
@@ -221,7 +224,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                mysql \
+                "$MYSQL_SERVICE" \
                 bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
         else
             sail_is_not_running
@@ -233,7 +236,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                 pgsql \
+                 "$PGSQL_SERVICE" \
                  bash -c 'PGPASSWORD=${PGPASSWORD} psql -U ${POSTGRES_USER} ${POSTGRES_DB}'
         else
             sail_is_not_running
@@ -245,7 +248,7 @@ if [ $# -gt 0 ]; then
 
         if [ "$EXEC" == "yes" ]; then
             docker-compose exec \
-                -u sail \
+                -u "$APP_USER" \
                 "$APP_SERVICE" \
                 bash
         else
